@@ -31,7 +31,7 @@ namespace POCOPersist.Cassandra
             return new CassandraTypedClient<T>();
         }
 
-        private const string ValueColumnIdentifier = "Val";
+        public static string ValueColumnIdentifier = "Val";
 
         bool keyspaceAndColumnFamilyChecked = false;
         public void CheckAndCreateKeyspaceAndColumnFamily(CassandraContext context)
@@ -51,8 +51,10 @@ namespace POCOPersist.Cassandra
                     context.AddColumnFamily(new Apache.Cassandra.CfDef() { Name = ColumnFamily, Keyspace = Keyspace });
             }
         }
+        #region GetRawValue
 
-        protected string GetRawValue(string key)
+
+        protected string GetRawValue<T>(T key)
         {
             string value = null;
 
@@ -61,127 +63,14 @@ namespace POCOPersist.Cassandra
                 var colFamily = context.GetColumnFamily(ColumnFamily);
                 try
                 {
-                    var col = colFamily.GetColumn(key, ValueColumnIdentifier);
+                    FluentColumn col = null;
 
-                    if (col != null)
-                        value = col.ColumnValue;
+                    if (key is string)
+                        col = colFamily.GetColumn(key as string, ValueColumnIdentifier);
+                    else if (key is int)
+                        col = colFamily.GetColumn(key as int?, ValueColumnIdentifier);
                     else
-                        value = null;
-                }
-                catch(CassandraException ex)
-                {
-                    value = null;
-                }
-            }
-
-            return value;
-        }
-
-        protected bool SetRawValue(string key, string value)
-        {
-            using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
-            {
-                checkAndCreateKeyspaceAndColumnFamily(context);
-                var colFamily = context.GetColumnFamily(ColumnFamily);
-                if (value != null)
-                    colFamily.InsertColumn(key, ValueColumnIdentifier, value);
-                else
-                    colFamily.RemoveColumn(key, ValueColumnIdentifier);
-            }
-
-            return true;
-        }
-
-        protected string GetRawValue(int key)
-        {
-            string value = null;
-
-            using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
-            {
-                var colFamily = context.GetColumnFamily(ColumnFamily);
-                try
-                {
-                    var col = colFamily.GetColumn(key, ValueColumnIdentifier);
-
-                    if (col != null)
-                        value = col.ColumnValue;
-                    else
-                        value = null;
-                }
-                catch(CassandraException ex)
-                {
-                    value = null;
-                }
-            }
-
-            return value;
-        }
-
-        protected bool SetRawValue(int key, string value)
-        {
-            using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
-            {
-                checkAndCreateKeyspaceAndColumnFamily(context);
-                var colFamily = context.GetColumnFamily(ColumnFamily);
-                if(value != null)
-                    colFamily.InsertColumn(key, ValueColumnIdentifier, value);
-                else
-                    colFamily.RemoveColumn(key, ValueColumnIdentifier);
-            }
-
-            return true;
-        }
-
-        protected string GetRawValue(string key1, string key2)
-        {
-            string value = null;
-
-            using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
-            {
-                var colFamily = context.GetColumnFamily(ColumnFamily);
-                try
-                {
-                    var col = colFamily.GetColumn(key1, key2);
-
-                    if (col != null)
-                        value = col.ColumnValue;
-                    else
-                        value = null;
-                }
-                catch(CassandraException ex)
-                {
-                    value = null;
-                }
-            }
-
-            return value;
-        }
-
-        protected bool SetRawValue(string key1, string key2, string value)
-        {
-            using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
-            {
-                checkAndCreateKeyspaceAndColumnFamily(context);
-                var colFamily = context.GetColumnFamily(ColumnFamily);
-                if (value != null)
-                    colFamily.InsertColumn(key1, key2, value);
-                else
-                    colFamily.RemoveColumn(key1, key2);
-            }
-
-            return true;
-        }
-
-        protected string GetRawValue(int key1, int key2)
-        {
-            string value = null;
-
-            using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
-            {
-                var colFamily = context.GetColumnFamily(ColumnFamily);
-                try
-                {
-                    var col = colFamily.GetColumn(key1, key2);
+                        throw new InvalidOperationException("Types not supported");
 
                     if (col != null)
                         value = col.ColumnValue;
@@ -197,17 +86,26 @@ namespace POCOPersist.Cassandra
             return value;
         }
 
-        protected string GetRawValue(string key1, int key2)
+        protected string GetRawValue<T, U>(T key1, U key2) 
         {
             string value = null;
 
             using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
             {
                 var colFamily = context.GetColumnFamily(ColumnFamily);
-
                 try
                 {
-                    var col = colFamily.GetColumn(key1, key2);
+                    FluentColumn col = null;
+                    if (key1 is string && key2 is string)
+                        col = colFamily.GetColumn(key1 as string, key2 as string);
+                    else if (key1 is string && key2 is int)
+                        col = colFamily.GetColumn(key1 as string, key2 as int?);
+                    else if (key1 is int && key2 is string)
+                        col = colFamily.GetColumn(key1 as int?, key2 as string);
+                    else if (key1 is int && key2 is int)
+                        col = colFamily.GetColumn(key1 as int?, key2 as int?);
+                    else
+                        throw new InvalidOperationException("Types not supported");
 
                     if (col != null)
                         value = col.ColumnValue;
@@ -223,93 +121,124 @@ namespace POCOPersist.Cassandra
             return value;
         }
 
-        protected string GetRawValue(int key1, string key2)
-        {
-            string value = null;
+        
+        #endregion
+        #region SetRawValue
 
+        //protected bool SetRawValue<T>(T key, string value, int? timeToLive = null, DateTimeOffset offset = new DateTimeOffset())
+        //{
+        //    using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
+        //    {
+        //        checkAndCreateKeyspaceAndColumnFamily(context);
+        //        var colFamily = context.GetColumnFamily(ColumnFamily);
+        //        if (key is string)
+        //        {
+        //            if (value != null)
+        //                colFamily.InsertColumn(key as string, ValueColumnIdentifier, value, offset, timeToLive);
+        //            else
+        //                colFamily.RemoveColumn(key as string, ValueColumnIdentifier);
+        //        }
+        //        else if (key is int)
+        //        {
+        //            if (value != null)
+        //                colFamily.InsertColumn(key as int?, ValueColumnIdentifier, value, offset, timeToLive);
+        //            else
+        //                colFamily.RemoveColumn(key as int?, ValueColumnIdentifier);
+        //        }
+        //        else
+        //            throw new InvalidOperationException("Types not supported");
+        //    }
+
+        //    return true;
+        //}
+
+        protected bool SetRawValue<T>(T key, string value)
+        {
             using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
             {
+                checkAndCreateKeyspaceAndColumnFamily(context);
                 var colFamily = context.GetColumnFamily(ColumnFamily);
-
-                try
+                if (key is string)
                 {
-                    var col = colFamily.GetColumn(key1, key2);
-
-                    if (col != null)
-                        value = col.ColumnValue;
+                    if (value != null)
+                        colFamily.InsertColumn(key as string, ValueColumnIdentifier, value);
                     else
-                        value = null;
+                        colFamily.RemoveColumn(key as string, ValueColumnIdentifier);
                 }
-                catch (CassandraException ex)
+                else if (key is int)
                 {
-                    value = null;
+                    if (value != null)
+                        colFamily.InsertColumn(key as int?, ValueColumnIdentifier, value);
+                    else
+                        colFamily.RemoveColumn(key as int?, ValueColumnIdentifier);
                 }
-            }
-
-            return value;
-        }
-
-        protected bool SetRawValue(int key1, int key2, string value)
-        {
-            using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
-            {
-                checkAndCreateKeyspaceAndColumnFamily(context);
-                var colFamily = context.GetColumnFamily(ColumnFamily);
-                if (value != null)
-                    colFamily.InsertColumn(key1, key2, value);
                 else
-                    colFamily.RemoveColumn(key1, key2);
+                    throw new InvalidOperationException("Types not supported");
             }
 
             return true;
         }
 
-        protected bool SetRawValue(string key1, int key2, string value)
+        protected bool SetRawValue<T, U>(T key1, U key2, string value)
         {
             using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
             {
                 checkAndCreateKeyspaceAndColumnFamily(context);
                 var colFamily = context.GetColumnFamily(ColumnFamily);
-                if (value != null)
-                    colFamily.InsertColumn(key1, key2, value);
+                if (key1 is string && key2 is string)
+                {
+                    if (value != null)
+                        colFamily.InsertColumn(key1 as string, key2 as string, value);
+                    else
+                        colFamily.RemoveColumn(key1 as string, key2 as string);
+                }
+                else if (key1 is string && key2 is int)
+                {
+                    if (value != null)
+                        colFamily.InsertColumn(key1 as string, key2 as int?, value);
+                    else
+                        colFamily.RemoveColumn(key1 as string, key2 as int?);
+                }
+                else if (key1 is int && key2 is string)
+                {
+                    if (value != null)
+                        colFamily.InsertColumn(key1 as int?, key2 as string, value);
+                    else
+                        colFamily.RemoveColumn(key1 as int?, key2 as string);
+                }
+                else if (key1 is int && key2 is int)
+                {
+                    if (value != null)
+                        colFamily.InsertColumn(key1 as int?, key2 as int?, value);
+                    else
+                        colFamily.RemoveColumn(key1 as int?, key2 as int?);
+                }
                 else
-                    colFamily.RemoveColumn(key1, key2);
+                    throw new InvalidOperationException("Types not supported");
             }
 
             return true;
         }
 
-        protected bool SetRawValue(int key1, string key2, string value)
+
+        #endregion
+
+        #region Remove
+
+        public void Remove<T>(T key)
         {
             using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
             {
-                checkAndCreateKeyspaceAndColumnFamily(context);
                 var colFamily = context.GetColumnFamily(ColumnFamily);
-                if (value != null)
-                    colFamily.InsertColumn(key1, key2, value);
+                if(key is string)
+                    colFamily.RemoveKey(key as string);
+                else if (key is int)
+                    colFamily.RemoveKey(key as int?);
                 else
-                    colFamily.RemoveColumn(key1, key2);
-            }
-
-            return true;
-        }
-
-        public void Remove(string key)
-        {
-            using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
-            {
-                var colFamily = context.GetColumnFamily(ColumnFamily);
-                colFamily.RemoveKey(key);
+                    throw new InvalidOperationException("Types not supported");
             }
         }
 
-        public void Remove(int key)
-        {
-            using (var context = new CassandraContext(new CassandraSession(Keyspace, new FluentCassandra.Connections.Server(Host, HostPort, HostTimeout))))
-            {
-                var colFamily = context.GetColumnFamily(ColumnFamily);
-                colFamily.RemoveKey(key);
-            }
-        }
+        #endregion
     }
 }

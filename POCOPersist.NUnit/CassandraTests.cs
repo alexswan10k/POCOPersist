@@ -188,7 +188,7 @@ namespace POCOPersist.NUnit
 
             var u1In = new User()
             {
-                Id = 90001,
+                Id = 9,
                 Name = "DeleteMe",
                 Logins = 1
             };
@@ -214,6 +214,8 @@ namespace POCOPersist.NUnit
             client.SetValue(5, null);
             client.SetValue(1, 1, null);
             client.SetValue(2, 1, null);
+            client.SetValue(2, 17, null);
+            client.SetValue(44, 0, null);
 
             var u1Out = client.GetValue(4);
             var u2Out = client.GetValue(5);
