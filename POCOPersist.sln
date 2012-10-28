@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POCOPersist.Cassandra", "POCOPersist.Cassandra\POCOPersist.Cassandra.csproj", "{70E2F3E2-777F-4FCB-B9D5-911CA6E53828}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POCOPersist.Core", "POCOPersist.Core\POCOPersist.Core.csproj", "{066FAA27-628E-479F-8D71-4F75F5D6AD94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POCOPersist.NUnit", "POCOPersist.NUnit\POCOPersist.NUnit.csproj", "{7C628DF6-DD54-46F6-9C9B-FC9DD955134E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{066FAA27-628E-479F-8D71-4F75F5D6AD94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{066FAA27-628E-479F-8D71-4F75F5D6AD94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{066FAA27-628E-479F-8D71-4F75F5D6AD94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{066FAA27-628E-479F-8D71-4F75F5D6AD94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70E2F3E2-777F-4FCB-B9D5-911CA6E53828}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70E2F3E2-777F-4FCB-B9D5-911CA6E53828}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70E2F3E2-777F-4FCB-B9D5-911CA6E53828}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70E2F3E2-777F-4FCB-B9D5-911CA6E53828}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C628DF6-DD54-46F6-9C9B-FC9DD955134E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C628DF6-DD54-46F6-9C9B-FC9DD955134E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C628DF6-DD54-46F6-9C9B-FC9DD955134E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C628DF6-DD54-46F6-9C9B-FC9DD955134E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

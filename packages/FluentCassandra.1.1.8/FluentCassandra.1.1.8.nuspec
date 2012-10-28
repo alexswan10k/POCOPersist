@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>FluentCassandra</id>
+    <version>1.1.8</version>
+    <title>Fluent Cassandra</title>
+    <authors>Nick Berardi</authors>
+    <owners>Nick Berardi</owners>
+    <licenseUrl>https://github.com/managedfusion/fluentcassandra/raw/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/managedfusion/fluentcassandra</projectUrl>
+    <iconUrl>https://github.com/managedfusion/fluentcassandra/raw/master/nuget/FluentCassandra.Logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>FluentCassandra is a .NET library for accessing Cassandra, which wraps the Thrift client library and provides a more fluent POCO interface for accessing and querying the objects in Cassandra.</description>
+    <summary>FluentCassandra is a .NET library for accessing Cassandra, which wraps the Thrift client library and provides a more fluent POCO interface for accessing and querying the objects in Cassandra.</summary>
+    <language>en-US</language>
+    <tags>fluent cassandra apache nosql database managedfusion .net40</tags>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Core" targetFramework=".NETFramework4.0" />
+      <frameworkAssembly assemblyName="System.Numerics" targetFramework=".NETFramework4.0" />
+      <frameworkAssembly assemblyName="System.Web" targetFramework=".NETFramework4.0" />
+    </frameworkAssemblies>
+  </metadata>
+</package>
