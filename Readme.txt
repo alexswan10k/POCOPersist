@@ -1,0 +1,1 @@
+POCOPersist is a simple library inspired by the great work done with ServiceStack.Redis to allow persisting POCO's to a data store as serialised JSON. Currently only cassandra is supported.
