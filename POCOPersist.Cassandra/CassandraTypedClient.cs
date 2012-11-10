@@ -29,61 +29,91 @@ namespace POCOPersist.Cassandra
             return ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(this.GetRawValue(key));
         }
 
-        public T GetValue(string key1, string key2)
+        public T GetValue(string key, string column)
         {
-            return ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(this.GetRawValue(key1, key2));
+            return ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(this.GetRawValue(key, column));
         }
 
-        public T GetValue(string key1, int key2)
+        public T GetValue(string key, int column)
         {
-            return ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(this.GetRawValue(key1, key2));
+            return ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(this.GetRawValue(key, column));
         }
 
-        public T GetValue(int key1, string key2)
+        public T GetValue(int key, string column)
         {
-            return ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(this.GetRawValue(key1, key2));
+            return ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(this.GetRawValue(key, column));
         }
-        public T GetValue(int key1, int key2)
+        public T GetValue(int key, int column)
         {
-            return ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(this.GetRawValue(key1, key2));
+            return ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(this.GetRawValue(key, column));
         }
         #endregion
+
         #region SetValue
-        public void SetValue(string key, T value)
+        public void SetValue(string key, T value, int? timeToLive = null, DateTimeOffset? offset = null)
         {
             var serialisedObject = ServiceStack.Text.JsonSerializer.SerializeToString<T>(value);
-            SetRawValue(key, serialisedObject);
+            SetRawValue(key, serialisedObject, timeToLive, offset);
         }
 
-        public void SetValue(int key, T value)
+        public void SetValue(int key, T value, int? timeToLive = null, DateTimeOffset? offset = null)
         {
             var serialisedObject = ServiceStack.Text.JsonSerializer.SerializeToString<T>(value);
-            SetRawValue(key, serialisedObject);
+            SetRawValue(key, serialisedObject, timeToLive, offset);
         }
 
-        public void SetValue(string key1, string key2, T value)
+        public void SetValue(string key, string column, T value, int? timeToLive = null, DateTimeOffset? offset = null)
         {
             var serialisedObject = ServiceStack.Text.JsonSerializer.SerializeToString<T>(value);
-            SetRawValue(key1, key2, serialisedObject);
+            SetRawValue(key, column, serialisedObject, timeToLive, offset);
         }
 
-        public void SetValue(string key1, int key2, T value)
+        public void SetValue(string key, int column, T value, int? timeToLive = null, DateTimeOffset? offset = null)
         {
             var serialisedObject = ServiceStack.Text.JsonSerializer.SerializeToString<T>(value);
-            SetRawValue(key1, key2, serialisedObject);
+            SetRawValue(key, column, serialisedObject, timeToLive, offset);
         }
 
-        public void SetValue(int key1, string key2, T value)
+        public void SetValue(int key, string column, T value, int? timeToLive = null, DateTimeOffset? offset = null)
         {
             var serialisedObject = ServiceStack.Text.JsonSerializer.SerializeToString<T>(value);
-            SetRawValue(key1, key2, serialisedObject);
+            SetRawValue(key, column, serialisedObject, timeToLive, offset);
         }
-        public void SetValue(int key1, int key2, T value)
+        public void SetValue(int key, int column, T value, int? timeToLive = null, DateTimeOffset? offset = null)
         {
             var serialisedObject = ServiceStack.Text.JsonSerializer.SerializeToString<T>(value);
-            SetRawValue(key1, key2, serialisedObject);
+            SetRawValue(key, column, serialisedObject, timeToLive, offset);
         }
         #endregion
+
+        public IEnumerable<T> GetValues(string key)
+        {
+            var outList = new List<T>();
+            foreach (var value in this.GetRawValues(key))
+            {
+                T obj = ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(this.GetRawValue(key));
+
+                if (obj != null)
+                    outList.Add(obj);
+            }
+
+            return outList;
+        }
+
+        public IEnumerable<T> GetValues(int key)
+        {
+            var outList = new List<T>();
+            foreach (var value in this.GetRawValues(key))
+            {
+                T obj = ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(value);
+
+                if (obj != null)
+                    outList.Add(obj);
+            }
+
+            return outList;
+        }
+
         #region Indexers
         public T this[string key]
         {
