@@ -30,7 +30,7 @@ The intention is to be able to write simple code like the code below to be able 
             var u1Out = client.GetValue(1);
 
 
-The idea is that the interface resembles some of the simplest key/value operations available from  data access tools, and allows out of the box working with POCO's with minimal editing
+The idea is that the interface resembles some of the simplest key/value operations available from various KVP style data access tools, and allows out of the box serialization of POCO's with minimal manipulation. The ServiceStack.Text JSON serialiser is used for maximum performance and flexibility.
 
 The dependencies are as follows:
 ServiceStack.Text for their JSOn serialiser
